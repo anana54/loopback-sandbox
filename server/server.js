@@ -3,6 +3,25 @@ var boot = require('loopback-boot');
 
 var app = module.exports = loopback();
 
+app.use(loopback.context());
+app.use(function myMiddleware (req, res, next) {
+        try {
+            var ctx = loopback.getCurrentContext();
+            console.log('In the middleware. my token is: ' + ctx.mytoken);
+            var authorizationHeader = req.headers.authorization;
+            if (!authorizationHeader) {
+            	return next();
+            }
+
+            ctx.mytoken = authorizationHeader;
+
+            return next();
+        } catch (err) {
+            console.log('Error processing middleware. ' + err);
+            return next();
+        }
+    });
+
 app.start = function() {
   // start the web server
   return app.listen(function() {
