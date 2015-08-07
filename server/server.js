@@ -9,13 +9,14 @@ app.use(function myMiddleware (req, res, next) {
         var ctx = loopback.getCurrentContext();
         ctx.set('mytoken', 'hello world');
         console.log(ctx.get('mytoken')); // returns 'hello world'
-        console.log('process: ' + Object.keys(process.context.loopback.active)); // returns 'mytoken'
+        console.log('active test 1: ' + Object.keys(process.context.loopback.active)); // returns 'mytoken'
         
         var client = redis.createClient('6379', '127.0.0.1', {'max_attempts': 1});
         client.on('connect', function () {
-            console.log('process: ' + process.context.loopback.active); // returns 'null'
+            console.log('active test 2: ' + process.context.loopback.active); // returns 'null'
             return next();
         });
+        console.log('active test 3: ' + Object.keys(process.context.loopback.active)); // returns 'mytoken'
     });
 
 app.start = function() {
