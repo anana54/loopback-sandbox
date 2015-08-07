@@ -1,0 +1,14 @@
+{
+  "name": "tester",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "username": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

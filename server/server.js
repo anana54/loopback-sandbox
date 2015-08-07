@@ -1,25 +1,21 @@
 var loopback = require('loopback');
 var boot = require('loopback-boot');
+var redis = require('redis');
 
 var app = module.exports = loopback();
 
 app.use(loopback.context());
 app.use(function myMiddleware (req, res, next) {
-        try {
-            var ctx = loopback.getCurrentContext();
-            console.log('In the middleware. my token is: ' + ctx.mytoken);
-            var authorizationHeader = req.headers.authorization;
-            if (!authorizationHeader) {
-            	return next();
-            }
-
-            ctx.mytoken = authorizationHeader;
-
-            return next();
-        } catch (err) {
-            console.log('Error processing middleware. ' + err);
-            return next();
-        }
+        var ctx = loopback.getCurrentContext();
+        ctx.set('mytoken', 'hello world');
+        console.log(ctx.get('mytoken')); // returns 'hello world'
+		console.log('process: ' + Object.keys(process.context.loopback.active)); // returns 'mytoken'
+		
+        var client = redis.createClient('6379', '127.0.0.1', {'max_attempts': 1});
+        client.on('connect', function () {
+        	console.log('process: ' + process.context.loopback.active); // returns 'null'
+        	return next();
+        });
     });
 
 app.start = function() {

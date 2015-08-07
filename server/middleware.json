@@ -15,8 +15,7 @@
   },
   "session": {
   },
-  "auth": {
-    "./middleware/myMiddleware": {}  
+  "auth": { 
   },
   "parse": {
   },
